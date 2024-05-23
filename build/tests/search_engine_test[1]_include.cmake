@@ -1,0 +1,5 @@
+if(EXISTS "C:/develop/search_engine/search_engine/build/tests/search_engine_test[1]_tests.cmake")
+  include("C:/develop/search_engine/search_engine/build/tests/search_engine_test[1]_tests.cmake")
+else()
+  add_test(search_engine_test_NOT_BUILT search_engine_test_NOT_BUILT)
+endif()
