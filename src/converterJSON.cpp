@@ -1,6 +1,12 @@
 #include <iostream>
 #include "converterJSON.h"
 
+bool ConverterJSON::configCheck(){
+	
+	return !readJsonFile("config.json").empty();
+};
+
+
 nlohmann::json ConverterJSON::readJsonFile(const std::string &filePath) {
     
     nlohmann::json buffer;
@@ -9,41 +15,35 @@ nlohmann::json ConverterJSON::readJsonFile(const std::string &filePath) {
     if (jsonFile.is_open()) {
         jsonFile>>buffer;
     } else {
-        std::cerr << filePath<<" file is missing" << std::endl;
+        std::cerr << "Error! File ../"<<filePath <<" is missing" << std::endl;
     }
-
     jsonFile.close();
     return buffer;
-
 };
 
 
 std::vector<std::string> ConverterJSON::GetTextDocuments() {
-	// Объявляем JSON-словарь, и присваиваем ему извлечённое содержимое файла "config.json"
+
 	nlohmann::json config = readJsonFile("config.json");
+	std::vector<std::string> docTextList;
 
-	// Создаёт вектор строк для сохранения конкретных строк
-	std::vector<std::string> docFilePathList, docTextList;
-
-	// В цикле добавляем в вектор нужные строки из ветки "files"
-	for (const auto& it : config["files"]) {
-		std::ifstream docFile("../" + std::string(it));
+	for (const auto& fileName : config["files"]) {
+		std::ifstream docFile("../" + std::string(fileName));
 		if (!docFile.is_open()) {
-			std::cout << "Wrong Path " << "../" + std::string(it) <<
-			" or file doesn't exist!" << std::endl;
-			break;
+			std::cerr << "Invalid path ../" 
+					  << std::string(fileName) 
+					  << " or there is no such file!" 
+					  << std::endl;
 		} else {
 			std::string text;
 			while (getline(docFile, text));
-			
 			docFile.close();
 			docTextList.push_back(text);
 		}
 	}
-
-	// Возвращает вектор содержимого файлов
 	return docTextList;
 }
+
 
 int ConverterJSON::GetResponsesLimit() {
 	
@@ -52,17 +52,19 @@ int ConverterJSON::GetResponsesLimit() {
 
 }
 
+
 std::vector<std::string> ConverterJSON::GetRequests() {
 
 	nlohmann::json requests = readJsonFile("requests.json");
 	std::vector<std::string> requestsList;
 
-	for (const auto& ell : requests["requests"]) {
-		requestsList.push_back(ell);
+	for (const auto& request : requests["requests"]) {
+		requestsList.push_back(request);
 	}
 	
 	return requestsList;
 }
+
 
 void ConverterJSON::putAnswers(std::vector<std::vector<RelativeIndex>>answers) {
 
@@ -83,26 +85,18 @@ void ConverterJSON::putAnswers(std::vector<std::vector<RelativeIndex>>answers) {
 			answersJSON["answers"][requestNumber]["result"]=true;
 
 			nlohmann::json answersList;
-
 			for (auto relevantDoc:answer){
-
 				nlohmann::json data ={
 					{"docid", relevantDoc.docId},
 					{"rank", relevantDoc.rank}
 				};
-				
 				answersList.push_back(data);
-
 			}
 
 			if (answer.size()==1){
-
 				answersJSON["answers"][requestNumber]=answersList;
-
 			} else {
-
 				answersJSON["answers"][requestNumber]["relevance"]=answersList;
-
 			}
 
 		}

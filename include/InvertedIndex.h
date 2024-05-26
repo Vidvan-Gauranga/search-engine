@@ -1,5 +1,4 @@
 #pragma once
-
 #include <string>
 #include <vector>
 #include <map>
@@ -9,6 +8,10 @@
 #include <mutex>
 #include "converterJSON.h"
 
+/**
+ * docId - id документа
+ * count - колличество вхождений слова в документе
+*/
 struct Entry {
 	size_t docId, count;
 	
@@ -18,26 +21,28 @@ struct Entry {
 };
 
 class InvertedIndex {
-
-	// Частотный словарь<слово, вектор структур<Entry{docId, count}>>
-	std::map<std::string, std::vector<Entry>> freqDictionary;
+	/**
+	 * Частотный словарь уникальных слов
+	*/
+	std::map<std::string, std::vector<Entry>> freqDictionary; 
 
 public:
 	InvertedIndex()  = default;
 	~InvertedIndex() = default;
 	/**
-	 * Обновить или заполнить базу документов, по которой будем совершать поиск
-	 *
-	 * @param &docs содержимое документов
+	 * Метод выделяет из документов уникальные слова, и помещает их в словарь freqDictionary .
+	 * В роли ключа выступает само слово, а в значение записывается вектор содержащий 
+	 * id документов и количество повторений этого слова в них.
+	 * @param &docs ссылка на вектор с содержимым документов по которым осуществляется поиск.
 	*/
 	void updateDocumentBase(const std::vector<std::string> &docs);
 
 	/**
-	 * Метод определяет количество вхождений слова в загруженной базе документов
-	 * @param word слово, частоту вхождений которого необходимо определить
-	 * @return  возвращает подготовленный список с частотой слов
+	 * Метод поиска по словарю уникальных слов
+	 * @param word искомое слово
+	 * @return  возвращает вектор содержащий информацию о колличестве вхождений слова 
+	 * в документы по которым осуществляется поиск.
 	*/
-
 	std::vector<Entry> getWordCount(std::string &word);
 
 };

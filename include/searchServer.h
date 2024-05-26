@@ -14,7 +14,11 @@ public:
     */
     SearchServer(InvertedIndex& idx) : index(idx){ };
 
+    /**
+     * Метод возвращает список уникальных слов из запроса
+     */
     std::set<std::string> getUniqueWord(std::string &query);
+
     /**
     * Метод обработки поисковых запросов
     * @param queries поисковые запросы взятые из файла

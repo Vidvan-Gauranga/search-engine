@@ -73,7 +73,6 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search (  const std::vecto
             
             relativeIndex.push_back(buf);
         }
-        
     }
 
     return relativeIndex;

@@ -7,10 +7,13 @@ main() {
 
 ConverterJSON converterJSON;
 InvertedIndex base;
-base.updateDocumentBase(converterJSON.GetTextDocuments());
+if (converterJSON.configCheck()) {
+    base.updateDocumentBase(converterJSON.GetTextDocuments());
 
-SearchServer searchServer (base);
-converterJSON.putAnswers(searchServer.search(converterJSON.GetRequests(),
-                                             converterJSON.GetResponsesLimit()));
+    SearchServer searchServer (base);
+    converterJSON.putAnswers(searchServer.search(converterJSON.GetRequests(),
+                                                 converterJSON.GetResponsesLimit()));
+}
+
 return 0;
 }
