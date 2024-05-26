@@ -35,8 +35,8 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search (  const std::vecto
 
     for (auto &uniqueWords: uniqueWordsList) {
 
-         std::map<size_t,size_t> countRelevance;
-         size_t maxRelevance = 1;
+        std::map<size_t,size_t> countRelevance;
+        size_t maxRelevance = 1;
 
         for (auto word:uniqueWords) {
 
@@ -52,9 +52,9 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search (  const std::vecto
             }
         }
 
-        if (!countRelevance.empty()){
+        std::vector<RelativeIndex> buf;
 
-            std::vector<RelativeIndex> buf;
+        if (!countRelevance.empty()){
 
             for (auto ell:countRelevance){
 
@@ -71,8 +71,8 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search (  const std::vecto
             
             if (buf.size()>responsesLimit) { buf.erase(buf.begin()+responsesLimit,buf.end());}
             
-            relativeIndex.push_back(buf);
         }
+        relativeIndex.push_back(buf);
     }
 
     return relativeIndex;

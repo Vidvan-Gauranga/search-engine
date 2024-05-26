@@ -95,7 +95,7 @@ TEST(TestCaseSearchServer, TestSimple) {
 		"americano cappuccino"
 	};
 	const std::vector<std::string> request = {"milk water", "sugar"};
-	const std::string expected = "[(2,1.000000)(0,0.700000)(1,0.300000)]";
+	const std::string expected = "[(2,1.000000)(0,0.700000)(1,0.300000)][]";
 	TestSearchServerFunctionality(docs,request,expected);
 
 }

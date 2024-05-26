@@ -79,6 +79,7 @@ void ConverterJSON::putAnswers(std::vector<std::vector<RelativeIndex>>answers) {
 		if (answer.empty()){
 
 			answersJSON["answers"][requestNumber]["result"]=false;
+			
 
 		} else {
 

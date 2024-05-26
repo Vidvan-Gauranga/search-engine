@@ -17,10 +17,11 @@ class ConverterJSON
 public:
     ConverterJSON() = default;
     ~ConverterJSON() = default;
-    
-    // Проверяет наличие файла config.json
+    /**
+     * Проверяет наличие файла config.json
+    */
     bool configCheck ();
-
+    
     /**
     * Метод чтения json файлов.
     * @param filePath На вход подается ссылка на строку std::string, где содержится путь к файлу.
