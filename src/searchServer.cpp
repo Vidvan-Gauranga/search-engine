@@ -4,16 +4,15 @@
 std::set<std::string> SearchServer::getUniqueWord(std::string &query){
     std::set<std::string> uniqueWords;
 
-    if (query.empty()){std::cout << "Query is empty!" << std::endl;}
+    if (query.empty()){
+        std::cout << "Query is empty!" << std::endl;
+    }
     else {
         std::regex pat{R"((\w+))"};
         for (std::sregex_iterator it(query.begin(),query.end(), pat); it!=std::sregex_iterator{}; ++it){
-
             uniqueWords.insert(it->str());
-
         }
     }
-
     return uniqueWords;
 };
 
