@@ -4,10 +4,7 @@
 std::set<std::string> SearchServer::getUniqueWord(std::string &query){
     std::set<std::string> uniqueWords;
 
-     if (query.empty()) {
-
-        std::cout << "Query is empty!" << std::endl;
-    }
+    if (query.empty()){std::cout << "Query is empty!" << std::endl;}
     else {
         std::regex pat{R"((\w+))"};
         for (std::sregex_iterator it(query.begin(),query.end(), pat); it!=std::sregex_iterator{}; ++it){
@@ -52,27 +49,27 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search (  const std::vecto
             }
         }
 
-        std::vector<RelativeIndex> buf;
+        std::vector<RelativeIndex> queryResults;
 
         if (!countRelevance.empty()){
 
             for (auto ell:countRelevance){
 
                 RelativeIndex data(ell.first,float(ell.second)/float(maxRelevance));
-                buf.push_back(data);
-
+                queryResults.push_back(data);
             }
 
-            std::sort(begin(buf),end(buf), [](RelativeIndex a, RelativeIndex b){
+            std::sort(begin(queryResults),end(queryResults), [](RelativeIndex a, RelativeIndex b){
 
                 return (a.rank>b.rank);
 
             });
             
-            if (buf.size()>responsesLimit) { buf.erase(buf.begin()+responsesLimit,buf.end());}
-            
+            if (queryResults.size()>responsesLimit) { 
+                queryResults.erase(queryResults.begin()+responsesLimit,queryResults.end());
+            }
         }
-        relativeIndex.push_back(buf);
+        relativeIndex.push_back(queryResults);
     }
 
     return relativeIndex;
