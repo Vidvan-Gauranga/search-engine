@@ -13,50 +13,65 @@ std::set<std::string> SearchServer::getUniqueWord(std::string &query){
                                   it!=std::sregex_iterator{}; ++it){
 
             uniqueWords.insert(it->str());
-
         }
     }
     return uniqueWords;
 };
 
 
-std::vector<std::vector<RelativeIndex>> SearchServer::search (  const std::vector<std::string>& queries, 
-                                                                const int& responsesLimit){
-    std::vector<std::vector<RelativeIndex>> relativeIndex;
-    for (auto querie:queries) {
-        std::map<size_t,size_t> absoluteRelevance;
-        size_t maxRelevance = 1;
+void SearchServer::calcAbsoluteRelevance (  std::map<size_t,size_t>& absRel, 
+                                            std::string& querie, 
+                                            size_t& maxRel) {
+    for (auto word:getUniqueWord(querie)) {
 
-        for (auto word:getUniqueWord(querie)) {
-
-            for (auto dataByDocs:index.getWordCount(word)) {
+        for (auto dataByDocs:index.getWordCount(word)) {
                     
-                absoluteRelevance[dataByDocs.docId]+=dataByDocs.count;
+            absRel[dataByDocs.docId]+=dataByDocs.count;
 
-                if (absoluteRelevance[dataByDocs.docId] > maxRelevance){
-                    maxRelevance = absoluteRelevance[dataByDocs.docId];
-                }   
+            if (absRel[dataByDocs.docId] > maxRel){
+                maxRel = absRel[dataByDocs.docId];
             }
+
         }
 
-        std::vector<RelativeIndex> queryResults;
-        std::cout<<querie<<std::endl;
-       
-        for (auto ell:absoluteRelevance){
+    }
 
-            RelativeIndex relativeRelevance(ell.first,float(ell.second)/float(maxRelevance));
+};
+
+
+void SearchServer::calcRelativeRelevance (  std::vector<RelativeIndex>& queryResults, 
+                                            std::map<size_t,size_t>& absRel, 
+                                            size_t& maxRel) {
+    for (auto ell:absRel){
+
+            RelativeIndex relativeRelevance(ell.first,float(ell.second)/float(maxRel));
             queryResults.push_back(relativeRelevance);
-            std::cout<<"go"<<std::endl;
         }
-
         std::sort(begin(queryResults),end(queryResults),[](RelativeIndex a, RelativeIndex b){
 
             return (a.rank>b.rank);
 
         });
-            
+
+};
+    
+
+
+
+std::vector<std::vector<RelativeIndex>> SearchServer::search (  const std::vector<std::string>& queries, 
+                                                                const int& responsesLimit){
+    std::vector<std::vector<RelativeIndex>> relativeIndex;
+    for (auto querie:queries) {
+        
+        std::map<size_t,size_t>absoluteRelevance;
+        size_t maxRelevance = 1;
+        calcAbsoluteRelevance (absoluteRelevance, querie, maxRelevance);
+
+        std::vector<RelativeIndex> queryResults;
+        calcRelativeRelevance(queryResults, absoluteRelevance,  maxRelevance);
+
         if (queryResults.size()>responsesLimit) { 
-            queryResults.erase(queryResults.begin()+responsesLimit,queryResults.end());
+            queryResults.erase(queryResults.begin() + responsesLimit,queryResults.end());
         }
        
         relativeIndex.push_back(queryResults);
