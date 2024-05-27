@@ -9,8 +9,11 @@ std::set<std::string> SearchServer::getUniqueWord(std::string &query){
     }
     else {
         std::regex pat{R"((\w+))"};
-        for (std::sregex_iterator it(query.begin(),query.end(), pat); it!=std::sregex_iterator{}; ++it){
+        for (std::sregex_iterator it(query.begin(),query.end(),pat); 
+                                  it!=std::sregex_iterator{}; ++it){
+
             uniqueWords.insert(it->str());
+
         }
     }
     return uniqueWords;
@@ -23,7 +26,7 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search (  const std::vecto
     std::vector<std::vector<RelativeIndex>> relativeIndex;
     std::vector<std::set<std::string>> uniqueWordsList;
 
-    for (auto querie:queries){
+    for (auto querie:queries) {
 
         uniqueWordsList.push_back(getUniqueWord(querie));
 
@@ -31,18 +34,21 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search (  const std::vecto
 
     for (auto &uniqueWords: uniqueWordsList) {
 
-        std::map<size_t,size_t> countRelevance;
+        std::map<size_t,size_t> absoluteRelevance;
         size_t maxRelevance = 1;
 
         for (auto word:uniqueWords) {
 
-            std::vector<Entry> wordCount = index.getWordCount(word);
+            std::vector<Entry> repetWordInDocs = index.getWordCount(word);
             
-            if (!wordCount.empty()) {
-                for (auto ell:wordCount) {
-                    countRelevance[ell.docId]+=ell.count;
-                    if (countRelevance[ell.docId]>maxRelevance) {
-                         maxRelevance=countRelevance[ell.docId];
+            if (!repetWordInDocs.empty()) {
+                for (auto dataByDocs:repetWordInDocs) {
+
+                    absoluteRelevance[dataByDocs.docId]+=dataByDocs.count;
+
+                    if (absoluteRelevance[dataByDocs.docId] > maxRelevance){
+                        
+                        maxRelevance = absoluteRelevance[dataByDocs.docId];
                     }   
                 }
             }
@@ -50,15 +56,15 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search (  const std::vecto
 
         std::vector<RelativeIndex> queryResults;
 
-        if (!countRelevance.empty()){
+        if (!absoluteRelevance.empty()){
 
-            for (auto ell:countRelevance){
+            for (auto ell:absoluteRelevance){
 
-                RelativeIndex data(ell.first,float(ell.second)/float(maxRelevance));
-                queryResults.push_back(data);
+                RelativeIndex relativeRelevance(ell.first,float(ell.second)/float(maxRelevance));
+                queryResults.push_back(relativeRelevance);
             }
 
-            std::sort(begin(queryResults),end(queryResults), [](RelativeIndex a, RelativeIndex b){
+            std::sort(begin(queryResults),end(queryResults),[](RelativeIndex a, RelativeIndex b){
 
                 return (a.rank>b.rank);
 
