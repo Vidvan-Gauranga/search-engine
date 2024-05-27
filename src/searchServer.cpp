@@ -22,58 +22,43 @@ std::set<std::string> SearchServer::getUniqueWord(std::string &query){
 
 std::vector<std::vector<RelativeIndex>> SearchServer::search (  const std::vector<std::string>& queries, 
                                                                 const int& responsesLimit){
-
     std::vector<std::vector<RelativeIndex>> relativeIndex;
-    std::vector<std::set<std::string>> uniqueWordsList;
-
     for (auto querie:queries) {
-
-        uniqueWordsList.push_back(getUniqueWord(querie));
-
-    }
-
-    for (auto &uniqueWords: uniqueWordsList) {
-
         std::map<size_t,size_t> absoluteRelevance;
         size_t maxRelevance = 1;
 
-        for (auto word:uniqueWords) {
+        for (auto word:getUniqueWord(querie)) {
 
-            std::vector<Entry> repetWordInDocs = index.getWordCount(word);
-            
-            if (!repetWordInDocs.empty()) {
-                for (auto dataByDocs:repetWordInDocs) {
+            for (auto dataByDocs:index.getWordCount(word)) {
+                    
+                absoluteRelevance[dataByDocs.docId]+=dataByDocs.count;
 
-                    absoluteRelevance[dataByDocs.docId]+=dataByDocs.count;
-
-                    if (absoluteRelevance[dataByDocs.docId] > maxRelevance){
-                        
-                        maxRelevance = absoluteRelevance[dataByDocs.docId];
-                    }   
-                }
+                if (absoluteRelevance[dataByDocs.docId] > maxRelevance){
+                    maxRelevance = absoluteRelevance[dataByDocs.docId];
+                }   
             }
         }
 
         std::vector<RelativeIndex> queryResults;
+        std::cout<<querie<<std::endl;
+       
+        for (auto ell:absoluteRelevance){
 
-        if (!absoluteRelevance.empty()){
-
-            for (auto ell:absoluteRelevance){
-
-                RelativeIndex relativeRelevance(ell.first,float(ell.second)/float(maxRelevance));
-                queryResults.push_back(relativeRelevance);
-            }
-
-            std::sort(begin(queryResults),end(queryResults),[](RelativeIndex a, RelativeIndex b){
-
-                return (a.rank>b.rank);
-
-            });
-            
-            if (queryResults.size()>responsesLimit) { 
-                queryResults.erase(queryResults.begin()+responsesLimit,queryResults.end());
-            }
+            RelativeIndex relativeRelevance(ell.first,float(ell.second)/float(maxRelevance));
+            queryResults.push_back(relativeRelevance);
+            std::cout<<"go"<<std::endl;
         }
+
+        std::sort(begin(queryResults),end(queryResults),[](RelativeIndex a, RelativeIndex b){
+
+            return (a.rank>b.rank);
+
+        });
+            
+        if (queryResults.size()>responsesLimit) { 
+            queryResults.erase(queryResults.begin()+responsesLimit,queryResults.end());
+        }
+       
         relativeIndex.push_back(queryResults);
     }
 

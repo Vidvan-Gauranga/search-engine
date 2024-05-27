@@ -1,7 +1,7 @@
 #include "invertedIndex.h"
 #include <thread>
 
-std::vector<Entry> InvertedIndex::getWordCount(std::string &word){
+std::vector<Entry> InvertedIndex::getWordCount(std::string& word){
     std::vector<Entry> result;
 
     if (freqDictionary.find(word)!=freqDictionary.end()){
