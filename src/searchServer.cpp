@@ -19,44 +19,35 @@ std::set<std::string> SearchServer::getUniqueWord(std::string &query){
 };
 
 
-void SearchServer::calcAbsoluteRelevance (  std::map<size_t,size_t>& absRel, 
-                                            std::string& querie, 
-                                            size_t& maxRel) {
+void SearchServer::calcAbsoluteRelevance (  std::map<size_t, size_t>& absRel, 
+                                            std::string& querie, size_t& maxRel) {
     for (auto word:getUniqueWord(querie)) {
-
         for (auto dataByDocs:index.getWordCount(word)) {
-                    
+
             absRel[dataByDocs.docId]+=dataByDocs.count;
 
             if (absRel[dataByDocs.docId] > maxRel){
                 maxRel = absRel[dataByDocs.docId];
             }
-
         }
-
     }
-
 };
 
 
 void SearchServer::calcRelativeRelevance (  std::vector<RelativeIndex>& queryResults, 
-                                            std::map<size_t,size_t>& absRel, 
-                                            size_t& maxRel) {
-    for (auto ell:absRel){
+                                            std::map<size_t,size_t>& absRel, size_t& maxRel) {
+    for (auto value:absRel){
 
-            RelativeIndex relativeRelevance(ell.first,float(ell.second)/float(maxRel));
-            queryResults.push_back(relativeRelevance);
-        }
-        std::sort(begin(queryResults),end(queryResults),[](RelativeIndex a, RelativeIndex b){
+        RelativeIndex relativeRelevance(value.first,float(value.second)/float(maxRel));
+        queryResults.push_back(relativeRelevance);
+    }
 
-            return (a.rank>b.rank);
-
-        });
+    std::sort(begin(queryResults),end(queryResults),[](RelativeIndex a, RelativeIndex b){
+        return (a.rank>b.rank);
+    });
 
 };
     
-
-
 
 std::vector<std::vector<RelativeIndex>> SearchServer::search (  const std::vector<std::string>& queries, 
                                                                 const int& responsesLimit){
@@ -65,12 +56,12 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search (  const std::vecto
         
         std::map<size_t,size_t>absoluteRelevance;
         size_t maxRelevance = 1;
-        calcAbsoluteRelevance (absoluteRelevance, querie, maxRelevance);
+        calcAbsoluteRelevance(absoluteRelevance,querie,maxRelevance);
 
         std::vector<RelativeIndex> queryResults;
-        calcRelativeRelevance(queryResults, absoluteRelevance,  maxRelevance);
+        calcRelativeRelevance(queryResults,absoluteRelevance,maxRelevance);
 
-        if (queryResults.size()>responsesLimit) { 
+        if (queryResults.size() > responsesLimit) { 
             queryResults.erase(queryResults.begin() + responsesLimit,queryResults.end());
         }
        

@@ -2,7 +2,6 @@
 #include "converterJSON.h"
 
 bool ConverterJSON::configCheck(){
-	
 	return !readJsonFile("config.json").empty();
 };
 
@@ -61,7 +60,6 @@ std::vector<std::string> ConverterJSON::GetRequests() {
 	for (const auto& request : requests["requests"]) {
 		requestsList.push_back(request);
 	}
-	
 	return requestsList;
 }
 
@@ -80,7 +78,6 @@ void ConverterJSON::putAnswers(std::vector<std::vector<RelativeIndex>>answers) {
 
 			answersJSON["answers"][requestNumber]["result"]=false;
 			
-
 		} else {
 
 			answersJSON["answers"][requestNumber]["result"]=true;
@@ -101,7 +98,7 @@ void ConverterJSON::putAnswers(std::vector<std::vector<RelativeIndex>>answers) {
 			}
 
 		}
-		
+
 		requestCount++;
 
 	}

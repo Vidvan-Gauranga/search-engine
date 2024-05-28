@@ -8,6 +8,11 @@ class SearchServer {
     InvertedIndex index;
 
     /**
+    * Метод возвращает список уникальных слов из запроса
+    */
+    std::set<std::string> getUniqueWord(std::string &query);
+
+    /**
     * Метод расчета абсолютной релевантности по запросу
     */
     void calcAbsoluteRelevance (std::map<size_t,size_t>& absRel, 
@@ -20,11 +25,6 @@ class SearchServer {
     void calcRelativeRelevance (std::vector<RelativeIndex>& queryResults,
                                 std::map<size_t,size_t>& absRel,
                                 size_t& maxRel);
-    /**
-    * Метод возвращает список уникальных слов из запроса
-    */
-    std::set<std::string> getUniqueWord(std::string &query);
-
 public:
     /**
     * @param idx в конструктор класса передаётся ссылка на класс InvertedIndex,
