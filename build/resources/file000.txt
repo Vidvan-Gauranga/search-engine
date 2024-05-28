@@ -1,1 +1,0 @@
-the best way to learn a programming language is by writing programs. typically, the first program beginners write is a program called "hello world", which simply printf "hello world" to your computer screen. although it is very simple, it contains all the fundamental components C++ programs have.
