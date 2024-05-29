@@ -5,15 +5,16 @@
 
 main() {
 
-ConverterJSON converterJSON;
-InvertedIndex base;
-if (converterJSON.configCheck()) {
-    base.updateDocumentBase(converterJSON.GetTextDocuments());
+    ConverterJSON converterJSON;
+    InvertedIndex base;
+    
+    if (converterJSON.configCheck()) {
+        base.updateDocumentBase(converterJSON.GetTextDocuments());
 
-    SearchServer searchServer (base);
-    converterJSON.putAnswers(searchServer.search(converterJSON.GetRequests(),
-                                                 converterJSON.GetResponsesLimit()));
-}
+        SearchServer searchServer (base);
+        converterJSON.putAnswers(searchServer.search(converterJSON.GetRequests(),
+                                                    converterJSON.GetResponsesLimit()));
+    }
 
-return 0;
+    return 0;
 }
