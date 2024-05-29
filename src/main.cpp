@@ -14,6 +14,5 @@ main() {
         converterJSON.putAnswers(searchServer.search(converterJSON.GetRequests(),
                                                     converterJSON.GetResponsesLimit()));
     }
-
         return 0;
 }
