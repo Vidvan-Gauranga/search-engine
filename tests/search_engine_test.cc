@@ -1,4 +1,4 @@
-#include "invertedIndex.h"
+#include "InvertedIndex.h"
 #include "searchServer.h"
 #include "gtest/gtest.h"
 #include <iostream>

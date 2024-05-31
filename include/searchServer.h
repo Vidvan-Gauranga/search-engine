@@ -1,7 +1,7 @@
 #pragma once
 #include <set>
 #include "converterJSON.h"
-#include "invertedIndex.h"
+#include "InvertedIndex.h"
 
 class SearchServer {
 
