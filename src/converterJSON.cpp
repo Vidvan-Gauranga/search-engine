@@ -9,7 +9,7 @@ bool ConverterJSON::configCheck(){
 nlohmann::json ConverterJSON::readJsonFile(const std::string &filePath) {
     
     nlohmann::json buffer;
-    std::ifstream jsonFile("../" + filePath);
+    std::ifstream jsonFile(filePath);
     
     if (jsonFile.is_open()) {
         jsonFile>>buffer;
@@ -27,9 +27,9 @@ std::vector<std::string> ConverterJSON::GetTextDocuments() {
 	std::vector<std::string> docTextList;
 
 	for (const auto& fileName : config["files"]) {
-		std::ifstream docFile("../" + std::string(fileName));
+		std::ifstream docFile(fileName);
 		if (!docFile.is_open()) {
-			std::cerr << "Invalid path ../" 
+			std::cerr << "Invalid path " 
 					  << std::string(fileName) 
 					  << " or there is no such file!" 
 					  << std::endl;
