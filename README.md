@@ -17,7 +17,7 @@ C:\search-engine-main\build>
 2. Генерируем с помошью cmake и компилятора MinGW сборочные файлы.
 <pre>
 C:\search-engine-main\build>cmake .. -G "MinGW Makefiles"
-
+</pre>
 3. Собираем проект
 <pre>
 C:\search-engine-main\build>cmake --build .
