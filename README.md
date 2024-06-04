@@ -70,7 +70,7 @@ ___
 {"answers":{"request_1":{"relevance":[{"docid":0,"rank":1.0},{"docid":2,"rank":1.0}],"result":true},"request_2":{"relevance":[{"docid":1,"rank":1.0},{"docid":0,"rank":0.7142857313156128},{"docid":2,"rank":0.5714285969734192}],"result":true},"request_3":[{"docid":0,"rank":1.0}],"request_4":{"result":false},"request_5":{"result":false}}}
 </pre>
 
-Результаты поиска в ___answers.json___ получены при обработке файлов из папки ___examples___.
+Результаты поиска в этом примере получены при обработке файлов из папки ___examples___.
 
 ### Принцип работы поискового движка:
 ___
