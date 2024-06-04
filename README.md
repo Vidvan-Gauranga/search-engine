@@ -22,16 +22,14 @@ C:\search-engine-main\build>cmake .. -G "MinGW Makefiles"
 <pre>
 C:\search-engine-main\build>cmake --build .
 </pre>
-Собранный файл ___search_engine.exe___ находится в папке ___src___ дирректории ___build___.
-Мы можем перейти в папку ___src___ и попробовать запустить его.
+4. Собранный файл ___search_engine.exe___ находится в папке ___src___ дирректории ___build___.
+Мы можем перейти в папку ___src___ и попробовать запустить его. Но программа выдаст нам ошибку:
 <pre>
-C:\search-engine-main\build\srs> search_engine.exe
-</pre>
-Но программа выдаст нам ошибку:
-<pre>
+C:\search-engine-main\build>cd src
+C:\search-engine-main\build\src> search_engine.exe
 Error! File config.json is missing
 </pre>
-Для корректной работы программы необходимо в диреректорию с исполняемым файлом добавить файл конфигурации  ___config.json___, 
+5. Для корректной работы программы необходимо в диреректорию с исполняемым файлом добавить файл конфигурации  ___config.json___, 
 файл с запросами  ___requests.json.___ и файлы по которым будет осуществляться поиск.
 Примеры всех этих файлов находятся папке ___examples___.
 
