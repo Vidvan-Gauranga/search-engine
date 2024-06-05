@@ -1,4 +1,4 @@
-#include "invertedIndex.h"
+#include "InvertedIndex.h"
 #include <thread>
 
 std::vector<Entry> InvertedIndex::getWordCount(std::string& word){
