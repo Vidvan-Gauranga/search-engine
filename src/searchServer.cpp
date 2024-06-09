@@ -65,7 +65,7 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search (  const std::vecto
             queryResults.erase(queryResults.begin() + responsesLimit,queryResults.end());
         }
        
-        relativeIndex.push_back(queryResults);
+        relativeIndex.emplace_back(queryResults);
     }
 
     return relativeIndex;

@@ -19,7 +19,7 @@ void InvertedIndex::updateDocumentBase(const std::vector<std::string>&docs){
 
     for(std::string doc:docs){
 
-        threadCreateBase.push_back(std::thread ([&, doc, id](){
+        threadCreateBase.emplace_back(std::thread ([&, doc, id](){
             
             std::map<std::string,size_t> inputDic;
             std::regex pat{R"((\w+))"};
@@ -29,9 +29,9 @@ void InvertedIndex::updateDocumentBase(const std::vector<std::string>&docs){
             }
 
             for(auto it = inputDic.cbegin(); it != inputDic.cend(); ++it){
-                Entry buf(id,it->second);
+                
                 mtx.lock();
-                freqDictionary[it->first].push_back(buf);
+                freqDictionary[it->first].emplace_back(id,it->second);
                 mtx.unlock();
             }
         }));

@@ -12,7 +12,7 @@ main() {
 
         SearchServer searchServer (base);
         converterJSON.putAnswers(searchServer.search(converterJSON.GetRequests(),
-                                                    converterJSON.GetResponsesLimit()));
+                                                     converterJSON.GetResponsesLimit()));
     }
         return 0;
 }
