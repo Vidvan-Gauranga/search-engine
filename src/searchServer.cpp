@@ -37,9 +37,7 @@ void SearchServer::calcAbsoluteRelevance (  std::map<size_t, size_t>& absRel,
 void SearchServer::calcRelativeRelevance (  std::vector<RelativeIndex>& queryResults, 
                                             std::map<size_t,size_t>& absRel, size_t& maxRel) {
     for (auto value:absRel){
-
-        RelativeIndex relativeRelevance(value.first,float(value.second)/float(maxRel));
-        queryResults.push_back(relativeRelevance);
+        queryResults.emplace_back(value.first,float(value.second)/float(maxRel));
     }
 
     std::sort(begin(queryResults),end(queryResults),[](RelativeIndex a, RelativeIndex b){
