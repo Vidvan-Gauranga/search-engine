@@ -74,29 +74,25 @@ void ConverterJSON::putAnswers(std::vector<std::vector<RelativeIndex>>answers) {
 
 		std::string requestNumber = "request_"+std::to_string(requestCount);
 
-		if (answer.empty()){
+		answersJSON["answers"][requestNumber]["result"] = !answer.empty();
 
-			answersJSON["answers"][requestNumber]["result"]=false;
+		if (answer.size()==1){
+
+				answersJSON["answers"][requestNumber]["docid"] = answer[0].docId;
+				answersJSON["answers"][requestNumber]["rank"] = answer[0].rank;
+
+		} else if(answer.size()>1){
 			
-		} else {
-
-			answersJSON["answers"][requestNumber]["result"]=true;
-
 			nlohmann::json answersList;
 			for (auto relevantDoc:answer){
-				nlohmann::json data ={
-					{"docid", relevantDoc.docId},
-					{"rank", relevantDoc.rank}
-				};
+				
+				nlohmann::json data	= {{"docid", relevantDoc.docId},
+									   {"rank", relevantDoc.rank}};
+
 				answersList.push_back(data);
 			}
 
-			if (answer.size()==1){
-				answersJSON["answers"][requestNumber]=answersList;
-			} else {
-				answersJSON["answers"][requestNumber]["relevance"]=answersList;
-			}
-
+			answersJSON["answers"][requestNumber]["relevance"] = answersList;
 		}
 
 		requestCount++;
