@@ -14,5 +14,8 @@ main() {
         converterJSON.putAnswers(searchServer.search(converterJSON.GetRequests(),
                                                      converterJSON.GetResponsesLimit()));
     }
-        return 0;
+
+    std::cout<<"The program is completed!";
+
+    return 0;
 }
